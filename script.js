@@ -1,5 +1,5 @@
 function computerPlay() {
-    let choice = Math.round(Math.random() * 3);
+    let choice = Math.floor(Math.random() * 3);
     if (choice == 0) {
         return "rock";
     } else if (choice == 1) {
@@ -9,41 +9,26 @@ function computerPlay() {
     }
 }
 
+function roundResult(pPlayerSelection, pComputerSelection, playerWon, tie=true,) {
+    if (tie) {
+        console.log(`round was a tie. both chose ${pPlayerSelection}`);
+    } else if (playerWon){
+        console.log(`player won the round. they played ${pPlayerSelection}, computer played ${pComputerSelection}`);
+    } else {
+        console.log(`player lost the round. they played ${pPlayerSelection}, computer played ${pComputerSelection}`);
+    }
+}
+
 function playRound(pPlayerSelection, pComputerSelection) {
     if (pPlayerSelection == "rock") {
-        if (pComputerSelection == "rock") {
-            console.log(`tie this round. Both chose rock`)
-            return;
-        } else if (pComputerSelection == "paper") {
-            console.log(`player loses this round. ${pComputerSelection} beats ${pPlayerSelection}`);
-            return false;
-        } else if (pComputerSelection == "scissors") {
-            console.log(`computer loses this round. ${pPlayerSelection} beats ${pComputerSelection}`);
-            return true;
-        }
+        return pComputerSelection == "scissors" ? true : false;
     } else if (pPlayerSelection == "paper") {
-        if (pComputerSelection == "paper") {
-            console.log("tie this round. Both chose paper")
-            return;
-        } else if (pComputerSelection == "scissors") {
-            console.log(`player loses this round. ${pComputerSelection} beats ${pPlayerSelection}`);
-            return false;
-        } else if (pComputerSelection == "rock") {
-            console.log(`computer loses this round. ${pPlayerSelection} beats ${pComputerSelection}`);
-            return true;
-        }
+        return pComputerSelection == "rock" ?  true : false;
     } else if (pPlayerSelection == "scissors") {
-        if (pComputerSelection == "scissors") {
-            console.log("tie this round. both chose scissors")
-            return;
-        } else if (pComputerSelection == "rock") {
-            console.log(`player loses this round. ${pComputerSelection} beats ${pPlayerSelection}`);
-            return false;
-        } else if (pComputerSelection == "paper") {
-            console.log(`computer loses this round. ${pPlayerSelection} beats ${pComputerSelection}`);
-            return true;
-        }
+        return pComputerSelection == "paper" ? true : false;
     }
+
+    return "tie";
 }
 
 let game = () => {
@@ -54,9 +39,13 @@ let game = () => {
         let vComputerSelection = computerPlay();
 
         let playersWins = playRound(vPlayerSelection, vComputerSelection)
-        if(playersWins) {
+        if(playersWins == "tie") {
+            roundResult(vPlayerSelection, vComputerSelection);
+        } else if (playersWins) {
+            roundResult(vPlayerSelection, vComputerSelection, true, false);
             playerScore++;
-        } else if (playersWins === false) {
+        } else {
+            roundResult(vPlayerSelection, vComputerSelection, false, false);
             computerScore++;
         }
         console.log(`you have ${playerScore} points. Computer has ${computerScore} points`);
